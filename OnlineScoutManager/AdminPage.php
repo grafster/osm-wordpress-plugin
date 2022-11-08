@@ -88,8 +88,8 @@ function my_plugin_options() {
 			}
 		}
 	}
-	$userid = get_option('OnlineScoutManager_userid');
-	if ($userid > 0) {
+	$userid = get_option('OnlineScoutManager_BearerTok3n');
+	if ($userid) {
 		include(WP_PLUGIN_DIR . '/' . PLUGIN_SLUG . '/views/admin.php');
 	} else {
 		$mode = 'usernamepassword';

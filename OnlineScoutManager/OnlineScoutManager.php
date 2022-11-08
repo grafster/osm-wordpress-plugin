@@ -73,7 +73,7 @@ $resultArray = json_decode($body, true);
 
 if (array_key_exists("access_token", $resultArray))
 {
-  update_cached_osm('OnlineScoutManager_BearerTok3n', $resultArray['access_token'] );
+  update_cached_osm('BearerTok3n', $resultArray['access_token'] );
 }
 else
 {
