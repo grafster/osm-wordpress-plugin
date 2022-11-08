@@ -1,0 +1,1 @@
+# osm-wordpress-plugin
