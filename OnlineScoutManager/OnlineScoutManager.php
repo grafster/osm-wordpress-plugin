@@ -2,8 +2,8 @@
 /*
 Plugin Name: Online Scout Manager
 Description: A collection of widgets to display data from OSM on your site.
-Version: 1.1
-Author: Online Youth Manager Ltd
+Version: 1.2
+Author: Online Youth Manager Ltd / Andrew Grafham
 License:
 
   Copyright 2012 Online Youth Manager Ltd.
@@ -48,6 +48,8 @@ $parts['client_id'] = get_option('OnlineScoutManager_ClientID');
 $parts['client_secret'] = get_option('OnlineScoutManager_ClientSecret');
 $parts['scope'] = 'section:programme:read';
 
+
+
 $data = '';
 foreach ($parts as $key => $val) {
         $data .= '&'.$key.'='.urlencode($val);
@@ -75,6 +77,7 @@ if (array_key_exists("access_token", $resultArray))
 }
 else
 {
+	
   update_cached_osm('loginFail', "now");
 }
 

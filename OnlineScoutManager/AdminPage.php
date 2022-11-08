@@ -40,12 +40,11 @@ function my_plugin_options() {
 		if ($mode == 'usernamepassword') {
 			$email = $_POST['email'];
 			$password = $_POST['password'];
-			$retVal = osm_query('users.php?action=authorise', array('email' => $email, 'password' => $password));
-			if ($retVal['userid'] and $retVal['userid'] > 0) {
-				$userid = $retVal['userid'];
-				$secret = $retVal['secret'];
-				update_option('OnlineScoutManager_userid', $userid);
-				update_option('OnlineScoutManager_secret', $secret);
+			//$retVal = osm_query('users.php?action=authorise', array('email' => $email, 'password' => $password));
+			if (true) {
+
+				update_option('OnlineScoutManager_ClientID', $email );
+				update_option('OnlineScoutManager_ClientSecret', $password);
 				
 				$storeRoles = getRoles();
 				$mode = 'enableroles';

@@ -5,11 +5,11 @@
 	<input type="hidden" name="mode" value="<?php echo $mode; ?>" />
 	<?php
 	if ($mode == 'usernamepassword') {?>
-	<p>This page does not work currently. Please enter OnlineScoutManager_ClientID and OnlineScoutManager_ClientSecret into wp_options in the database</p>
-	<?php 
-	         if (!get_option('OnlineScoutManager_ClientID')) {update_option("OnlineScoutManager_ClientID", "TBC");}  
-	         if (!get_option('OnlineScoutManager_ClientSecret')) {update_option("OnlineScoutManager_ClientSecret", "TBC");}  
-			 ?>
+	<p>Please enter your OSM email address and password below.</p>
+		<table>
+		<tr><td>Client ID</td><td><input type="text" name="email" value=""/></td></tr>
+		<tr><td>Client Secret</td><td><input type="password" name="password" value=""/></td></tr>
+		<tr><td colspan="2"><?php if (strlen($authoriseErrorMsg) > 0) { echo '<span style="color: red;">'.$authoriseErrorMsg.'</span><br />';}?><input id="submit" class="button-primary" type="submit" value="Authorise now" name="submit"></td></tr>
 	<?php } else if ($mode == 'enableroles') {?>
 		<p>Please select which sections should be enabled for use on this site.</p>		
 		<table>
