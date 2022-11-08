@@ -36,8 +36,8 @@ function getBearerToken()
 	$parts = array();
 $parts['grant_type'] = 'client_credentials';
 
-$parts['client_id'] = get_option('OnlineScoutManager_OnlineScoutManager_ClientID');
-$parts['client_secret'] = get_option('OnlineScoutManager_OnlineScoutManager_ClientSecret');
+$parts['client_id'] = get_option('OnlineScoutManager_ClientID');
+$parts['client_secret'] = get_option('OnlineScoutManager_ClientSecret');
 $parts['scope'] = 'section:programme:read';
 
 $data = '';

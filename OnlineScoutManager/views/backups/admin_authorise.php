@@ -5,7 +5,7 @@
 	<input type="hidden" name="mode" value="<?php echo $mode; ?>" />
 	<?php
 	if ($mode == 'usernamepassword') {?>
-	<p>This page does not work currently. Please enter OnlineScoutManager_OnlineScoutManager_ClientID and OnlineScoutManager_OnlineScoutManager_ClientSecret into wp_options in the database</p>
+	<p>This page does not work currently. Please enter OnlineScoutManager_ClientID and OnlineScoutManager_ClientSecret into <a href="/wp-admin/options.php">wp_options</a> in the database</p>
 		<p>Please enter your OSM email address and password below.</p>
 		<table>
 		<tr><td>Email</td><td><input type="text" name="email" value=""/></td></tr>

@@ -5,8 +5,11 @@
 	<input type="hidden" name="mode" value="<?php echo $mode; ?>" />
 	<?php
 	if ($mode == 'usernamepassword') {?>
-	<p>This page does not work currently. Please enter OnlineScoutManager_OnlineScoutManager_ClientID and OnlineScoutManager_OnlineScoutManager_ClientSecret into wp_options in the database</p>
-	
+	<p>This page does not work currently. Please enter OnlineScoutManager_ClientID and OnlineScoutManager_ClientSecret into wp_options in the database</p>
+	<?php 
+	         if (!get_option('OnlineScoutManager_ClientID')) {update_option("OnlineScoutManager_ClientID". "TBC");}  
+	         if (!get_option('OnlineScoutManager_ClientSecret')) {update_option("OnlineScoutManager_ClientSecret". "TBC");}  
+			 ?>
 	<?php } else if ($mode == 'enableroles') {?>
 		<p>Please select which sections should be enabled for use on this site.</p>		
 		<table>
