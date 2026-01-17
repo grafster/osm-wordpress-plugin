@@ -10,7 +10,7 @@ class OSM_Whats_Next extends WP_Widget {
 	 * the widget, loads localization files, and includes necessary scripts and
 	 * styles.
 	 */
-	function OSM_Whats_Next() {
+	function __construct() {
 
 	    // Define constants used throughout the plugin
 	    $this->init_plugin_constants();
@@ -20,7 +20,7 @@ class OSM_Whats_Next extends WP_Widget {
 			'description' => __('Shows your upcoming events and/or meetings', PLUGIN_LOCALE)
 		);	
 		
-		$this->WP_Widget('OSM_Whats_Next', __('OSM: Coming Up', PLUGIN_LOCALE), $widget_opts);
+		parent::__construct('OSM_Whats_Next', __('OSM: Coming Up', PLUGIN_LOCALE), $widget_opts);
 		load_plugin_textdomain(PLUGIN_LOCALE, false, dirname(plugin_basename( __FILE__ ) ) . '/lang/' );
 		
 	    // Load JavaScript and stylesheets

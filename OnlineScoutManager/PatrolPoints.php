@@ -10,7 +10,7 @@ class OSM_PatrolPoints extends WP_Widget {
 	 * the widget, loads localization files, and includes necessary scripts and
 	 * styles.
 	 */
-	function OSM_PatrolPoints() {
+	function __construct() {
 
 	    // Define constants used throughout the plugin
 	    $this->init_plugin_constants();
@@ -20,7 +20,7 @@ class OSM_PatrolPoints extends WP_Widget {
 			'description' => __('Shows the patrols and their points', PLUGIN_LOCALE)
 		);	
 		
-		$this->WP_Widget('OSM_PatrolPoints', __('OSM: Patrol Points', PLUGIN_LOCALE), $widget_opts);
+		parent::__construct('OSM_PatrolPoints', __('OSM: Patrol Points', PLUGIN_LOCALE), $widget_opts);
 		load_plugin_textdomain(PLUGIN_LOCALE, false, dirname(plugin_basename( __FILE__ ) ) . '/lang/' );
 		
     // Load JavaScript and stylesheets
