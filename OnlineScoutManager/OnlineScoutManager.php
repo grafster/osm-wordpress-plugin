@@ -1,24 +1,30 @@
 <?php
-/*
-Plugin Name: Online Scout Manager
-Description: A collection of widgets to display data from OSM on your site.
-Version: 1.2
-Author: Online Youth Manager Ltd / Andrew Grafham
-License:
+/**
+ * Plugin Name: Online Scout Manager
+ * Version: 1.3.0
+ * Plugin URI: https://www.onlinescoutmanager.co.uk/
+ * Description: A collection of widgets to display data from OSM on your site.
+ * Author: Andrew Grafham / Online Scout Manager
+ * Author URI: https://www.onlinescoutmanager.co.uk/
+ * Requires at least: 4.0
+ * Tested up to: 4.0
+ *
+ * Text Domain: online-scout-manager
+ * Domain Path: /lang/
+ *
+ * @package WordPress
+ * @author Andrew Grafham
+ * @since 1.3.0
+ */
 
-  Copyright 2012 Online Youth Manager Ltd.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-*/
-
+ 
 require("ComingUp.php");
 require("PatrolPoints.php");
 require("AdminPage.php");
 require("page_replaces/challenge_badges.php");
 require("page_replaces/programme.php");
 require("page_replaces/events.php");
+
 function register_osm_widgets() {
 	register_widget("OSM_PatrolPoints");
 	register_widget("OSM_Whats_Next");
