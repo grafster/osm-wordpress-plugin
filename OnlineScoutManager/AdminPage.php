@@ -9,6 +9,7 @@ function getRoles() {
 	if ($roles) {
 		foreach ($roles as $role) {
 			switch ($role['section']) {
+				case 'earlyyears':
 				case 'beavers':
 				case 'cubs':
 				case 'scouts':
