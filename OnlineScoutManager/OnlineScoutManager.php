@@ -2,7 +2,7 @@
 /*
 Plugin Name: Online Scout Manager
 Description: A collection of widgets to display data from OSM on your site.
-Version: 1.4.0
+Version: 1.4.1
 Author: Online Youth Manager Ltd / Andrew Grafham
 License:
 
