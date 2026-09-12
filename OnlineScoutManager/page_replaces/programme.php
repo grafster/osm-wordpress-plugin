@@ -14,7 +14,8 @@ function show_programme($attrs){
 			$prog = get_cached_osm('programme'.$sectionid.'-'.$termid);
 			if (!$prog) {
 				$prog = osm_query('programme.php?action=getProgramme&sectionid='.$sectionid.'&termid='.$termid);
-				if ($prog['items']) {
+				$storeProgramme = array();
+				if (!empty($prog['items'])) {
 					foreach ($prog['items'] as $meeting) {
 						$dateInSeconds = strtotime($meeting['meetingdate']);
 						$storeProgramme[] = array('dateInSeconds' => strtotime($meeting['meetingdate']), 'date' => date("d/m/Y", $dateInSeconds), 'title' => $meeting['title'], 'summary' => $meeting['notesforparents']);

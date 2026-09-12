@@ -5,11 +5,16 @@
 	<input type="hidden" name="mode" value="<?php echo $mode; ?>" />
 	<?php
 	if ($mode == 'usernamepassword') {?>
-	<p>Please enter your OSM email address and password below.</p>
+	<p>Please enter your OSM API Client ID and Client Secret below (from the app you registered in your OSM account).</p>
 		<table>
 		<tr><td>Client ID</td><td><input type="text" name="email" value=""/></td></tr>
 		<tr><td>Client Secret</td><td><input type="password" name="password" value=""/></td></tr>
-		<tr><td colspan="2"><?php if (strlen($authoriseErrorMsg) > 0) { echo '<span style="color: red;">'.$authoriseErrorMsg.'</span><br />';}?><input id="submit" class="button-primary" type="submit" value="Authorise now" name="submit"></td></tr>
+		<tr><td colspan="2"><?php if (strlen($authoriseErrorMsg) > 0) { echo '<span style="color: red;">'.$authoriseErrorMsg.'</span><br />';}?><input id="submit" class="button-primary" type="submit" value="Continue" name="submit"></td></tr>
+		</table>
+	<?php } else if ($mode == 'authorise') {?>
+		<p>Click below to log in to OSM and approve access for this site. You'll be brought back here automatically.</p>
+		<?php if (strlen($authoriseErrorMsg) > 0) { echo '<span style="color: red;">'.$authoriseErrorMsg.'</span><br />';}?>
+		<p><a id="submit" class="button-primary" href="<?php echo esc_url($authoriseUrl); ?>">Authorise with OSM</a></p>
 	<?php } else if ($mode == 'enableroles') {?>
 		<p>Please select which sections should be enabled for use on this site.</p>		
 		<table>

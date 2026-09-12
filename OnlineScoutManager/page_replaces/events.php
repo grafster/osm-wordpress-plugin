@@ -12,9 +12,9 @@ function show_events($attrs){
 			$events = get_cached_osm('events'.$sectionid);
 			if (!$events) {
 				$events = osm_query('events.php?action=getEvents&futureonly=true&sectionid='.$sectionid);
-				$events['items'] = array_reverse($events['items']);
-				if ($events['items']) {
-					foreach ($events['items'] as $meeting) {
+				$storeEvents = array();
+				if (!empty($events['items'])) {
+					foreach (array_reverse($events['items']) as $meeting) {
 						$dateInSeconds = strtotime($meeting['startdate']);
 						$storeEvents[] = array('date' => date("d/m/Y", $dateInSeconds), 'title' => $meeting['name'], 'summary' => $meeting['notes']);
 						
