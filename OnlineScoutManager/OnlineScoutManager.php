@@ -183,30 +183,47 @@ function getBearerToken()
 	return null;
 }
 
+// Circuit breaker for OSM's own data endpoints (getUserRoles, getProgramme, etc.) -
+// separate from the oauth/token-specific loginFail flag. Without this, a rate limit,
+// server error or network blip would get retried on every single page view with no
+// backoff at all, which is exactly the pattern that gets a site rate-limited/blocked.
+function osm_api_backoff_active() {
+	$backoff = get_option('OnlineScoutManager_apiBackoff');
+	return $backoff && $backoff['time'] > time();
+}
+
+function osm_set_api_backoff($seconds, $reason) {
+	update_option('OnlineScoutManager_apiBackoff', array('time' => time() + $seconds));
+	osm_debug_log('osm_query backing off for ' . $seconds . 's', $reason);
+}
+
 function osm_query($url, $parts = null) {
-	global $OnlineScoutManager_userid, $OnlineScoutManager_secret;
+	if (osm_api_backoff_active()) {
+		return null;
+	}
+
 	if ($parts == null) {
 		$parts = array();
 	}
 
-	
+
 	$data = '';
 	foreach ($parts as $key => $val) {
 		$data .= '&'.$key.'='.urlencode($val);
 	}
 	$curl_handle = curl_init();
-	
+
 	$bearer_token = getBearerToken();
-	
+
 	if (is_null($bearer_token))
 	{
 	    return null;
 	}
-	
+
 	curl_setopt($curl_handle, CURLOPT_URL, 'https://www.onlinescoutmanager.co.uk/'.$url);
 	curl_setopt($curl_handle, CURLOPT_POSTFIELDS, substr($data, 1));
 	curl_setopt($curl_handle, CURLOPT_POST, 1);
-	curl_setopt($curl_handle, CURLOPT_CONNECTTIMEOUT, 2);
+	curl_setopt($curl_handle, CURLOPT_CONNECTTIMEOUT, 5);
 	curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, 1);
 	curl_setopt($curl_handle, CURLOPT_HTTPHEADER, array('Authorization: Bearer ' . $bearer_token));
 
@@ -216,8 +233,26 @@ function osm_query($url, $parts = null) {
 
 	if ($curl_error) {
 		osm_debug_log('osm_query curl error for ' . $url, $curl_error);
+		osm_set_api_backoff(300, 'curl error on ' . $url . ': ' . $curl_error);
+		return null;
 	}
 	osm_debug_log('osm_query ' . $url . ' HTTP ' . $http_code . ' response', $msg);
+
+	if ($http_code == 429) {
+		osm_set_api_backoff(900, 'OSM rate limit (429) on ' . $url);
+		return null;
+	}
+	if ($http_code >= 500) {
+		osm_set_api_backoff(300, 'OSM server error ' . $http_code . ' on ' . $url);
+		return null;
+	}
+	if ($http_code == 401 || $http_code == 403) {
+		// Our cached token thought it was still valid but OSM has rejected it -
+		// drop it so the next call goes through the (already-throttled) refresh path
+		// instead of resending a token OSM has already refused.
+		delete_option('OnlineScoutManager_BearerTok3n');
+		return null;
+	}
 
 	return json_decode($msg, true);
 }

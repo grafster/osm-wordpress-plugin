@@ -9,23 +9,28 @@ function challenge_badges($attrs){
 			$section = $roles[$sectionid]['section'];
 
 			$summaryStructure = get_cached_osm('challengeSummary'.$section);
-			if (!$summaryStructure) {
+			if ($summaryStructure === false) {
 				$summaryStructure = osm_query('challenges.php?action=summaryStructure&section='.$section.'&sectionid='.$sectionid.'&termid=' . $termid. '&type=challenge');
-				update_cached_osm('challengeSummary'.$section, $summaryStructure, 86400 * 30);
+				// Only cache when OSM actually answered - see programme.php for why.
+				if ($summaryStructure !== null) {
+					update_cached_osm('challengeSummary'.$section, $summaryStructure, 86400 * 30);
+				}
 			}
 			$string = "<table class='badgetbl'><tr><th>Name</th>";
-			foreach ($summaryStructure[1]['rows'] as $column) {
+			foreach ($summaryStructure[1]['rows'] ?? array() as $column) {
 				if ($column['field'] != 'scottish') {
 					$string .= '<th>'.$column['name'].'</th>';
 				}
 			}
 			$string .= '</tr>';
 			$challenges = get_cached_osm('challengeDetails'.$sectionid);
-			if (!$challenges) {
+			if ($challenges === false) {
 				$challenges = osm_query('challenges.php?action=summary&section='.$section.'&sectionid='.$sectionid.'&termid='.$termid.'&type=challenge');
-				update_cached_osm('challengeDetails'.$sectionid, $challenges);
+				if ($challenges !== null) {
+					update_cached_osm('challengeDetails'.$sectionid, $challenges);
+				}
 			}
-			foreach ($challenges['items'] as $kid) {
+			foreach ($challenges['items'] ?? array() as $kid) {
 				$string .= '<tr><td>'.$kid['firstname'].' '.substr($kid['lastname'], 0, 1).'</td>';
 				foreach ($summaryStructure[1]['rows'] as $column) {
 					if ($column['field'] != 'scottish') {

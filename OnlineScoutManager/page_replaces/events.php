@@ -10,17 +10,20 @@ function show_events($attrs){
 			$section = $roles[$sectionid]['section'];
 
 			$events = get_cached_osm('events'.$sectionid);
-			if (!$events) {
-				$events = osm_query('events.php?action=getEvents&futureonly=true&sectionid='.$sectionid);
+			if ($events === false) {
+				$apiResult = osm_query('events.php?action=getEvents&futureonly=true&sectionid='.$sectionid);
 				$storeEvents = array();
-				if (!empty($events['items'])) {
-					foreach (array_reverse($events['items']) as $meeting) {
+				if (!empty($apiResult['items'])) {
+					foreach (array_reverse($apiResult['items']) as $meeting) {
 						$dateInSeconds = strtotime($meeting['startdate']);
 						$storeEvents[] = array('date' => date("d/m/Y", $dateInSeconds), 'title' => $meeting['name'], 'summary' => $meeting['notes']);
 						
 					}
 				}
-				update_cached_osm('events'.$sectionid, $storeEvents);
+				// Only cache when OSM actually answered - see programme.php for why.
+				if ($apiResult !== null) {
+					update_cached_osm('events'.$sectionid, $storeEvents);
+				}
 				$events = $storeEvents;
 			}
 			

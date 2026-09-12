@@ -12,16 +12,21 @@ function show_programme($attrs){
 			$section = $roles[$sectionid]['section'];
 
 			$prog = get_cached_osm('programme'.$sectionid.'-'.$termid);
-			if (!$prog) {
-				$prog = osm_query('programme.php?action=getProgramme&sectionid='.$sectionid.'&termid='.$termid);
+			if ($prog === false) {
+				$apiResult = osm_query('programme.php?action=getProgramme&sectionid='.$sectionid.'&termid='.$termid);
 				$storeProgramme = array();
-				if (!empty($prog['items'])) {
-					foreach ($prog['items'] as $meeting) {
+				if (!empty($apiResult['items'])) {
+					foreach ($apiResult['items'] as $meeting) {
 						$dateInSeconds = strtotime($meeting['meetingdate']);
 						$storeProgramme[] = array('dateInSeconds' => strtotime($meeting['meetingdate']), 'date' => date("d/m/Y", $dateInSeconds), 'title' => $meeting['title'], 'summary' => $meeting['notesforparents']);
 					}
 				}
-				update_cached_osm('programme'.$sectionid.'-'.$termid, $storeProgramme);
+				// Only cache when OSM actually answered - a failed/backed-off call (null)
+				// shouldn't be cached as if it were a genuine empty result, or real data
+				// would stay hidden for a full day after the problem clears.
+				if ($apiResult !== null) {
+					update_cached_osm('programme'.$sectionid.'-'.$termid, $storeProgramme);
+				}
 				$prog = $storeProgramme;
 			}
 			$excludeSummary = in_array('excludesummary', $attrs);
